@@ -1,7 +1,10 @@
+import 'reflect-metadata';
 import express from 'express';
 
-const app = express();
+function main() {
+  const app = express();
 
-app.get('/', (req, res) => res.send('Hello World!'));
+  app.listen(5000, () => console.log('Server Started'));
+}
 
-app.listen(5000, () => console.log('Server running!'));
+main();
