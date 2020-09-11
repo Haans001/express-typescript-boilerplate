@@ -1,13 +1,19 @@
 import 'reflect-metadata';
 import express from 'express';
 import loaders from './loaders/index';
+import config from './config';
 
 async function main() {
   const app = express();
 
-  await loaders();
+  // Loading database, api etc.
+  await loaders(app);
 
-  app.listen(5000, () => console.log('Server Started'));
+  app.listen(config.port, () => {
+    console.log('#####################################################');
+    console.log(`Server started at port ${config.port}. Happy Hacking!`);
+    console.log('#####################################################');
+  });
 }
 
 main();
