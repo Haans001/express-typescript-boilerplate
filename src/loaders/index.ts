@@ -4,8 +4,7 @@ import mysqlLoader from './mysql';
 
 export default async (app: Application) => {
   try {
-    await mysqlLoader();
-    console.log('DB loaded and connected');
+    // await mysqlLoader();
 
     expressLoader(app);
   } catch (error) {

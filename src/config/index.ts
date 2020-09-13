@@ -19,4 +19,9 @@ export default {
   port: process.env.PORT || 5000,
 
   apiPrefix: '/api',
+
+  jwt: {
+    expires: 3600,
+    secret: process.env.JWT_SECRET,
+  },
 };

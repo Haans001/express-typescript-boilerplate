@@ -1,11 +1,10 @@
 import { Router } from 'express';
+import auth from './routes/auth';
 
 export default (): Router => {
   const api = Router();
 
-  api.get('/', (req, res) => {
-    res.send('Hello World!');
-  });
+  api.use(auth());
 
   return api;
 };
