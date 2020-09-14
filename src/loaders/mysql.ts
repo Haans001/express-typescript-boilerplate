@@ -1,12 +1,21 @@
-import { createConnection, Connection, ConnectionOptions, DatabaseType } from 'typeorm';
+import { createConnection, Connection } from 'typeorm';
 import config from '../config/index';
+import { User } from '../entities/User';
+import logger from './logger';
 
-const options = {
-  type: config.database.type as DatabaseType,
-  host: config.database.host,
-  database: config.database.database,
-  username: config.database.username,
-  password: config.database.password,
+export default async (): Promise<Connection> => {
+  const connection = await createConnection({
+    type: 'mysql',
+    host: 'localhost',
+    username: config.database.username,
+    port: parseInt(config.database.port),
+    database: config.database.database,
+    entities: [User],
+  });
+
+  connection.synchronize();
+
+  logger.info('Database loaded.');
+
+  return connection;
 };
-
-export default async (): Promise<Connection> => await createConnection(options);

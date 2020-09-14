@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import { ConnectionOptions } from 'typeorm';
 
 const envFound = dotenv.config();
 if (envFound.error) {
@@ -10,7 +9,6 @@ if (envFound.error) {
 
 export default {
   database: {
-    type: 'mysql',
     host: 'localhost',
     port: process.env.DATABASE_PORT || '3306',
     username: process.env.DATABASE_USERNAME || 'test',
@@ -19,4 +17,11 @@ export default {
   },
 
   port: process.env.PORT || 5000,
+
+  apiPrefix: '/api',
+
+  jwt: {
+    expires: 3600,
+    secret: process.env.JWT_SECRET,
+  },
 };
