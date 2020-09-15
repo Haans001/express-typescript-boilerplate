@@ -13,6 +13,8 @@ export default async (): Promise<Connection> => {
     entities: [User],
   });
 
+  connection.synchronize();
+
   logger.info('Database loaded.');
 
   return connection;

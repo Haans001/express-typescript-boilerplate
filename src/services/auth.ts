@@ -5,6 +5,7 @@ import { IUserInputDTO } from '../interfaces/IUser';
 import bcrypt from 'bcrypt';
 import { User } from '../entities/User';
 import config from '../config';
+import logger from '../loaders/logger';
 
 @Service()
 export default class AuthService {
@@ -13,7 +14,7 @@ export default class AuthService {
 
     try {
       const hashedPassword = await bcrypt.hash(userInputDto.password, salt);
-      const userRecord = getManager().create(User, {
+      const userRecord = User.create({
         ...userInputDto,
         password: hashedPassword,
       });
@@ -22,11 +23,14 @@ export default class AuthService {
         throw new Error('User Cannot Be Created');
       }
 
-      //   await getManager().save(userRecord);
+      await userRecord.save();
+
+      logger.info(userRecord);
+      Reflect.deleteProperty(userRecord, 'password');
 
       const token = this.generateToken(userRecord);
 
-      console.log(userRecord);
+      return { user: userRecord, token };
     } catch (error) {
       throw error;
     }

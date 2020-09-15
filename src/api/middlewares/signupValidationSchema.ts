@@ -16,9 +16,9 @@ export default [
     .custom((value, { req }) => value === req.body.password && !(value.length === 0 || req.body.password.length === 0))
     .withMessage("Passwords don't match."),
   check('email')
-    .custom(value => {
+    .custom(async value => {
       const userRepository = getRepository(User);
-      const user = userRepository.findOne({ email: value });
+      const user = await userRepository.findOne({ email: value });
       if (user) {
         return Promise.reject('E-mail already in use.');
       }
