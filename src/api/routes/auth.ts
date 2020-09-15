@@ -1,8 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Container from 'typedi';
-import HttpException from '../../exceptions/HttpException';
 import { IUserInputDTO } from '../../interfaces/IUser';
+import logger from '../../loaders/logger';
 import AuthService from '../../services/auth';
+import UserService from '../../services/user';
+import isAuth from '../middlewares/isAuth';
 import signupValidationSchema from '../middlewares/signupValidationSchema';
 import validateRequest from '../middlewares/validateRequest';
 
@@ -14,15 +16,29 @@ export default (): Router => {
     validateRequest(signupValidationSchema),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
+        logger.info('Signing up...');
         const authService = Container.get(AuthService);
-        const { token, user } = await authService.SignUp(req.body as IUserInputDTO);
+        const { user, token } = await authService.SignUp(req.body as IUserInputDTO);
 
-        res.status(201).json({ token, user });
+        return res.status(201).json({ user, token });
       } catch (error) {
-        next(new HttpException(500, error.message));
+        next(error);
       }
     },
   );
+
+  router.post('/signin', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
+      const authService = Container.get(AuthService);
+      const { token, user } = await authService.SignIn(email, password);
+      res.status(200).json({ user, token });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.get('/isAuth', isAuth(false));
 
   return router;
 };

@@ -1,6 +1,7 @@
 import { check } from 'express-validator';
 import { getRepository } from 'typeorm';
 import { User } from '../../entities/User';
+import logger from '../../loaders/logger';
 
 export default [
   check('password')
