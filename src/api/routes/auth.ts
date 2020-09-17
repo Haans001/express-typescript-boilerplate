@@ -3,7 +3,6 @@ import Container from 'typedi';
 import { IUserInputDTO } from '../../interfaces/IUser';
 import logger from '../../loaders/logger';
 import AuthService from '../../services/auth';
-import UserService from '../../services/user';
 import isAuth from '../middlewares/isAuth';
 import signupValidationSchema from '../middlewares/signupValidationSchema';
 import validateRequest from '../middlewares/validateRequest';

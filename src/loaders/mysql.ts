@@ -1,9 +1,11 @@
-import { createConnection, Connection } from 'typeorm';
+import Container from 'typedi';
+import { createConnection, Connection, useContainer } from 'typeorm';
 import config from '../config/index';
 import { User } from '../entities/User';
 import logger from './logger';
 
 export default async (): Promise<Connection> => {
+  useContainer(Container);
   const connection = await createConnection({
     type: 'mysql',
     host: 'localhost',

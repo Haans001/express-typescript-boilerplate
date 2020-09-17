@@ -7,10 +7,12 @@ import config from '../config';
 import logger from '../loaders/logger';
 import UserService from './user';
 import HttpException from '../exceptions/HttpException';
+import { InjectRepository } from 'typeorm-typedi-extensions';
+import { Repository } from 'typeorm';
 
 @Service()
 export default class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, @InjectRepository(User) private userRepository: Repository<User>) {}
 
   public async SignUp(userInputDto: IUserInputDTO): Promise<{ user: User; token: string }> {
     const salt = 10;
@@ -18,7 +20,7 @@ export default class AuthService {
     try {
       const hashedPassword = await bcrypt.hash(userInputDto.password, salt);
       logger.info(hashedPassword);
-      const userRecord = User.create({
+      const userRecord = this.userRepository.create({
         ...userInputDto,
         password: hashedPassword,
       });
@@ -28,7 +30,7 @@ export default class AuthService {
       }
 
       logger.info('Saving user entity...');
-      await userRecord.save();
+      await this.userRepository.save(userRecord);
 
       const token = this.generateToken(userRecord);
 
