@@ -14,6 +14,10 @@ async function main() {
     console.log(`Server started at port ${config.port}. Happy Hacking!`);
     console.log('#####################################################');
   });
+
+  console.log(process.env.NODE_ENV);
+
+  return app;
 }
 
 main();

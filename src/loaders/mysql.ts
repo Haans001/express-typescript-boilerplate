@@ -6,12 +6,15 @@ import logger from './logger';
 
 export default async (): Promise<Connection> => {
   useContainer(Container);
+
+  const database = (process.env.NODE_ENV = 'development' ? config.database.database : 'test');
+
   const connection = await createConnection({
     type: 'mysql',
     host: 'localhost',
     username: config.database.username,
     port: parseInt(config.database.port),
-    database: config.database.database,
+    database: database,
     entities: [User],
   });
 
